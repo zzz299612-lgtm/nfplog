@@ -382,4 +382,290 @@ function paint() {
   const caret = document.activeElement && document.activeElement.selectionStart;
   const days = togetherDays();
   const label = (days > 0 ? "+" : "") + days + "일";
-  const head = `<header class="bar"><div class="wrap bar-row"><div><h1 class="display">프피로그</h1><p class="sub display"><span class="dot" style="background:#e8a8a8"></span><span class="dot" style="background:#f3e4c4"></span><span class="dot" style="background:#8fb89a"></span>INFP X ENFP</p></div><p class="daymark" aria-label="2026년 11월 3일부터 ${label}"><svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-8.15C.7 10.1 1.2 6.7 4.05 5.4 6.2
+  const head = `<header class="bar"><div class="wrap bar-row"><div><h1 class="display">프피로그</h1><p class="sub display"><span class="dot" style="background:#e8a8a8"></span><span class="dot" style="background:#f3e4c4"></span><span class="dot" style="background:#8fb89a"></span>INFP X ENFP</p></div><p class="daymark" aria-label="2026년 11월 3일부터 ${label}"><svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-8.15C.7 10.1 1.2 6.7 4.05 5.4 6.2 4.4 8.4 5.1 12 8.2c3.6-3.1 5.8-3.8 7.95-2.8 2.85 1.3 3.35 4.7 1.38 7.45C18.7 16.65 12 21 12 21z"/></svg><span class="display" style="font-size:1.15rem;line-height:1">${label}</span></p></div></header>`;
+  if (!ui.unlocked) {
+    root.innerHTML = head + `<main class="wrap"><form class="lock" id="lock"><h2 class="display" style="font-size:1.8rem;margin:0">비밀번호</h2><p class="muted" style="margin:0">둘만 아는 숫자로 달력을 열어요.</p><label class="sr" for="pw">비밀번호</label><input id="pw" class="field" style="text-align:center;letter-spacing:.3em;font-size:1.1rem" inputmode="numeric" autocomplete="current-password" maxlength="8" placeholder="••••" value="${esc(ui.pass)}" required>${ui.passError ? `<p class="err" role="alert">${esc(ui.passError)}</p>` : ""}<button class="press pine" type="submit">열기</button></form></main>`;
+    const input = document.getElementById("pw");
+    input.addEventListener("input", () => { ui.pass = input.value; ui.passError = ""; });
+    document.getElementById("lock").addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (ui.pass.trim() === PASSWORD) {
+        localStorage.setItem(UNLOCK, "1");
+        ui.unlocked = true;
+        ui.pass = "";
+        paint();
+      } else {
+        ui.pass = "";
+        ui.passError = "비밀번호가 달라요";
+        paint();
+      }
+    });
+    return;
+  }
+
+  const cover = state.cover || ("data:image/svg+xml;charset=utf-8," + encodeURIComponent(DEFAULT_SVG));
+  const daysOfMonth = monthGrid(ui.year, ui.month0);
+  const cells = daysOfMonth.map((day) => {
+    const date = parseYmd(day);
+    const inMonth = date.getFullYear() === ui.year && date.getMonth() === ui.month0;
+    const items = eventsOn(day);
+    const pills = items.slice(0, 3).map((item) => `<span class="pill ${tone(item.authorName)}">${esc(item.title)}</span>`).join("");
+    const more = items.length > 3 ? `<span style="font-size:10px">+${items.length - 3}</span>` : "";
+    const cls = ["cell", "press", inMonth ? "" : "off", day === ui.selected ? "on" : "", day === today ? "today" : ""].filter(Boolean).join(" ");
+    return `<button type="button" class="${cls}" data-day="${day}"><span class="num">${date.getDate()}</span>${pills}${more}</button>`;
+  }).join("");
+  const week = WEEK.map((name) => `<div>${name}</div>`).join("");
+  const dayEvents = eventsOn(ui.selected);
+  const dayNotes = state.notes.filter((note) => note.day === ui.selected);
+  const selectedDate = parseYmd(ui.selected);
+  const who = WRITERS.map((name) => {
+    const on = state.writers.includes(name);
+    return `<button type="button" class="chip ${on ? "on" : ""}" data-who="${name}" aria-pressed="${on}">${name}</button>`;
+  }).join("");
+  const tags = TAGS.map((tag) => `<button type="button" class="chip ${ui.draft.tag === tag.id ? "on" : ""}" data-tag="${tag.id}">${tag.label}</button>`).join("");
+  const eventItems = dayEvents.length === 0
+    ? `<li class="muted">이 날의 일정이 없습니다.</li>`
+    : dayEvents.map((item) => `<li class="item ${tone(item.authorName)}"><div><p style="margin:0;font-weight:500">${esc(item.title)}</p><p class="muted" style="margin:.25rem 0 0;font-size:.875rem">${esc(whenLabel(item))} · ${esc(item.authorName)}</p>${item.note ? `<p style="margin:.25rem 0 0;font-size:.875rem">${esc(item.note)}</p>` : ""}</div><div><button type="button" class="icon" data-edit="${esc(item.id)}" aria-label="수정">✎</button><button type="button" class="icon" data-del-event="${esc(item.id)}" aria-label="지우기">✕</button></div></li>`).join("");
+  const noteItems = dayNotes.length === 0
+    ? `<li class="muted">아직 기록이 없습니다.</li>`
+    : dayNotes.map((note) => `<li class="item ${tone(note.authorName)}"><div><p style="margin:0;font-size:.875rem">${esc(note.body)}</p><p class="muted" style="margin:.25rem 0 0;font-size:.75rem">${esc(note.authorName)}</p></div><button type="button" class="icon" data-del-note="${esc(note.id)}" aria-label="기록 지우기">✕</button></li>`).join("");
+  const timeFields = ui.draft.allDay ? "" : `<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem"><label>시작<input id="start" class="field" type="time" value="${esc(ui.draft.startTime)}"></label><label>끝<input id="end" class="field" type="time" value="${esc(ui.draft.endTime)}"></label></div>`;
+
+  root.innerHTML = head + `<main class="wrap" style="padding-top:1.5rem;display:grid;gap:1rem">
+    <div>
+      <img class="cover" alt="" src="${cover}">
+      <div class="row" style="margin-top:.75rem">
+        <button type="button" class="press pine" id="cover-btn">표지 바꾸기</button>
+        <button type="button" class="press ghost" id="export">일정 내려받기</button>
+        <button type="button" class="press ghost" id="import">일정 불러오기</button>
+        <input id="cover-file" class="sr" type="file" accept="image/jpeg,image/png,image/webp">
+        <input id="import-file" class="sr" type="file" accept="application/json,.json">
+      </div>
+      <p class="muted" style="font-size:.8rem">${cloudOn() ? "연결되어 있어요. 어디서 열어도 같은 일정이 보여요." : "Firebase 키를 넣기 전에는 이 브라우저에만 저장돼요."}</p>
+    </div>
+    ${ui.error ? `<p class="err" role="alert">${esc(ui.error)}</p>` : ""}
+    <div class="grid">
+      <section class="panel" style="padding:.8rem">
+        <div class="month-head">
+          <div style="display:flex;align-items:center">
+            <button type="button" class="nav" id="prev" aria-label="이전 달">‹</button>
+            <h2 class="display title">${ui.year}년 ${ui.month0 + 1}월</h2>
+            <button type="button" class="nav" id="next" aria-label="다음 달">›</button>
+          </div>
+          <button type="button" class="press ghost" id="today">오늘</button>
+        </div>
+        <div class="legend row" style="margin:.4rem 0 .6rem"><span class="geun">근수</span><span class="jin">진희</span><span class="both">둘 다</span></div>
+        <div class="week">${week}</div>
+        <div class="days">${cells}</div>
+      </section>
+      <section class="panel" id="day-panel" style="padding:1rem">
+        <p class="muted" style="margin:0;font-size:.75rem">${WEEK[selectedDate.getDay()]}요일</p>
+        <h2 class="display" style="margin:0;font-size:2rem">${selectedDate.getDate()}</h2>
+        <p class="muted" style="margin:0">${selectedDate.getMonth() + 1}월 ${selectedDate.getDate()}일 ${WEEK[selectedDate.getDay()]}요일</p>
+        ${ui.status ? `<p class="ok">${esc(ui.status)}</p>` : ""}
+        <form id="event-form" style="display:grid;gap:.7rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line)">
+          <h3 style="margin:0;font-size:.9rem">${ui.draft.id ? "일정 고치기" : "일정"}</h3>
+          <div class="row" id="who">${who}</div>
+          <input id="title" class="field" maxlength="80" placeholder="점심, 회의, 생일" value="${esc(ui.draft.title)}" required>
+          <div class="row">${tags}</div>
+          <button type="button" class="press ghost" id="all-day" style="justify-self:start">${ui.draft.allDay ? "하루 종일" : "시간 지정"}</button>
+          ${timeFields}
+          <textarea id="memo" class="field" maxlength="500" placeholder="장소나 준비물">${esc(ui.draft.note)}</textarea>
+          <button class="press pine" type="submit">${ui.draft.id ? "일정 저장" : "일정 추가"}</button>
+        </form>
+        <ul style="list-style:none;padding:0;display:grid;gap:.5rem">${eventItems}</ul>
+        <form id="note-form" style="display:grid;gap:.7rem;margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line)">
+          <h3 style="margin:0;font-size:.9rem">하루 기록</h3>
+          <p class="muted" style="margin:0;font-size:.75rem">일정만 적어도 돼요. 기록은 비워도 됩니다.</p>
+          <textarea id="note" class="field" maxlength="400" placeholder="남기고 싶을 때만 적어 주세요">${esc(ui.noteBody)}</textarea>
+          <button class="press mint" type="submit">기록 남기기</button>
+        </form>
+        <ul style="list-style:none;padding:0;display:grid;gap:.5rem">${noteItems}</ul>
+      </section>
+    </div>
+  </main>`;
+  bind();
+  if (focusId) {
+    const again = document.getElementById(focusId);
+    if (again) {
+      again.focus();
+      if (typeof caret === "number" && again.setSelectionRange) again.setSelectionRange(caret, caret);
+    }
+  }
+}
+
+function bind() {
+  document.getElementById("prev").onclick = () => shift(-1);
+  document.getElementById("next").onclick = () => shift(1);
+  document.getElementById("today").onclick = () => {
+    const date = parseYmd(today);
+    ui.year = date.getFullYear();
+    ui.month0 = date.getMonth();
+    ui.selected = today;
+    paint();
+  };
+  document.querySelectorAll("[data-day]").forEach((button) => {
+    button.onclick = () => {
+      ui.selected = button.getAttribute("data-day");
+      ui.status = "";
+      paint();
+      if (window.matchMedia("(max-width: 767px)").matches) {
+        document.getElementById("day-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+  });
+  document.querySelectorAll("[data-who]").forEach((button) => {
+    button.onclick = () => {
+      const name = button.getAttribute("data-who");
+      state.writers = state.writers.includes(name) ? state.writers.filter((item) => item !== name) : WRITERS.filter((item) => state.writers.includes(item) || item === name);
+      saveState();
+      pushMeta();
+      paint();
+    };
+  });
+  document.querySelectorAll("[data-tag]").forEach((button) => {
+    button.onclick = () => { ui.draft.tag = button.getAttribute("data-tag"); paint(); };
+  });
+  document.getElementById("all-day").onclick = () => { ui.draft.allDay = !ui.draft.allDay; paint(); };
+  document.getElementById("title").oninput = (event) => { ui.draft.title = event.target.value; };
+  document.getElementById("memo").oninput = (event) => { ui.draft.note = event.target.value; };
+  document.getElementById("note").oninput = (event) => { ui.noteBody = event.target.value; };
+  const start = document.getElementById("start");
+  const end = document.getElementById("end");
+  if (start) start.onchange = (event) => { ui.draft.startTime = event.target.value; };
+  if (end) end.onchange = (event) => { ui.draft.endTime = event.target.value; };
+  document.getElementById("event-form").onsubmit = (event) => {
+    event.preventDefault();
+    ui.error = "";
+    if (state.writers.length < 1) { ui.error = "누가 적었는지 골라 주세요"; paint(); return; }
+    const title = ui.draft.title.trim();
+    if (!title) return;
+    const next = {
+      id: ui.draft.id || crypto.randomUUID(),
+      title,
+      note: ui.draft.note.trim(),
+      startsOn: ui.selected,
+      allDay: ui.draft.allDay,
+      startTime: ui.draft.allDay ? null : ui.draft.startTime,
+      endTime: ui.draft.allDay ? null : (ui.draft.endTime || null),
+      tag: ui.draft.tag,
+      authorName: authorName(state.writers),
+    };
+    state.events = ui.draft.id ? state.events.map((item) => item.id === next.id ? next : item) : [next, ...state.events];
+    saveState();
+    pushEvent(next);
+    ui.status = ui.draft.id ? "일정을 고쳤습니다" : "일정을 남겼습니다";
+    ui.draft = { id: null, title: "", note: "", allDay: true, startTime: "09:00", endTime: "10:00", tag: "plan" };
+    paint();
+  };
+  document.getElementById("note-form").onsubmit = (event) => {
+    event.preventDefault();
+    ui.error = "";
+    const body = ui.noteBody.trim();
+    if (!body) return;
+    if (state.writers.length < 1) { ui.error = "누가 적었는지 골라 주세요"; paint(); return; }
+    const note = { id: crypto.randomUUID(), day: ui.selected, body, authorName: authorName(state.writers) };
+    state.notes = [note, ...state.notes];
+    ui.noteBody = "";
+    ui.status = "기록을 남겼습니다";
+    saveState();
+    pushNote(note);
+    paint();
+  };
+  document.querySelectorAll("[data-edit]").forEach((button) => {
+    button.onclick = () => {
+      const item = state.events.find((event) => event.id === button.getAttribute("data-edit"));
+      if (!item) return;
+      ui.draft = { id: item.id, title: item.title, note: item.note || "", allDay: !!item.allDay, startTime: item.startTime || "09:00", endTime: item.endTime || "10:00", tag: item.tag || "plan" };
+      const named = WRITERS.filter((name) => item.authorName.includes(name));
+      if (named.length) { state.writers = named; pushMeta(); }
+      saveState();
+      paint();
+    };
+  });
+  document.querySelectorAll("[data-del-event]").forEach((button) => {
+    button.onclick = () => {
+      const id = button.getAttribute("data-del-event");
+      if (!confirm("이 일정을 지울까요?")) return;
+      state.events = state.events.filter((item) => item.id !== id);
+      if (ui.draft.id === id) ui.draft.id = null;
+      ui.status = "일정을 지웠습니다";
+      saveState();
+      dropEvent(id);
+      paint();
+    };
+  });
+  document.querySelectorAll("[data-del-note]").forEach((button) => {
+    button.onclick = () => {
+      if (!confirm("이 기록을 지울까요?")) return;
+      const id = button.getAttribute("data-del-note");
+      state.notes = state.notes.filter((item) => item.id !== id);
+      ui.status = "기록을 지웠습니다";
+      saveState();
+      dropNote(id);
+      paint();
+    };
+  });
+  document.getElementById("cover-btn").onclick = () => document.getElementById("cover-file").click();
+  document.getElementById("cover-file").onchange = async (event) => {
+    const file = event.target.files && event.target.files[0];
+    event.target.value = "";
+    if (!file) return;
+    try {
+      state.cover = await shrinkCover(file);
+      ui.error = "";
+      ui.status = "표지를 바꿨습니다";
+      saveState();
+      pushMeta();
+      paint();
+    } catch (error) {
+      ui.error = error.message || "표지를 바꾸지 못했습니다";
+      paint();
+    }
+  };
+  document.getElementById("export").onclick = () => {
+    const blob = new Blob([JSON.stringify({ cover: state.cover, events: state.events, notes: state.notes, writers: state.writers }, null, 2)], { type: "application/json" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "프피로그-백업.json";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1500);
+  };
+  document.getElementById("import").onclick = () => document.getElementById("import-file").click();
+  document.getElementById("import-file").onchange = async (event) => {
+    const file = event.target.files && event.target.files[0];
+    event.target.value = "";
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      if (!data || !Array.isArray(data.events) || !Array.isArray(data.notes)) throw new Error("이 파일은 프피로그 백업이 아니에요");
+      if (!confirm("이 폰의 일정을 불러온 파일로 바꿀까요?")) return;
+      state.events = data.events;
+      state.notes = data.notes;
+      state.cover = typeof data.cover === "string" && data.cover.startsWith("data:image/") ? data.cover : state.cover;
+      state.writers = Array.isArray(data.writers) ? WRITERS.filter((name) => data.writers.includes(name)) : state.writers;
+      saveState();
+      await replaceCloud();
+      ui.error = "";
+      ui.status = "일정을 불러왔습니다";
+      paint();
+    } catch (error) {
+      ui.error = error.message || "파일을 읽지 못했습니다";
+      paint();
+    }
+  };
+}
+
+function shift(delta) {
+  const date = new Date(ui.year, ui.month0 + delta, 1);
+  ui.year = date.getFullYear();
+  ui.month0 = date.getMonth();
+  paint();
+}
+
+startCloud();
+paint();
+</script>
+</body>
+</html>
+
