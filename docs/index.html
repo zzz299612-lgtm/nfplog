@@ -1,1 +1,385 @@
-PLACEHOLDER_FULL_CONTENT
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>프피로그</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4efe4;
+    --paper-2: #e4efe4;
+    --card: #fffdf8;
+    --ink: #1e2a22;
+    --muted: #4a5c50;
+    --line: #d5e0d4;
+    --pine: #2f6b45;
+    --pine-hover: #245536;
+    --on-pine: #f7f4ec;
+    --blush: #e8a8a8;
+    --butter: #f3e4c4;
+    --mint: #8fb89a;
+    --rose: #c97b7b;
+    --shadow: 0 0 0 1px rgba(47, 107, 69, 0.12), 0 12px 28px -18px rgba(22, 62, 42, 0.4);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+    line-height: 1.5;
+    background:
+      radial-gradient(28rem 18rem at 0% 0%, rgba(47, 107, 69, 0.18), transparent 70%),
+      radial-gradient(24rem 16rem at 100% 0%, rgba(243, 228, 196, 0.7), transparent 68%),
+      radial-gradient(22rem 16rem at 100% 100%, rgba(143, 184, 154, 0.45), transparent 70%),
+      var(--paper);
+    background-attachment: fixed;
+  }
+  button, input, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  .display { font-family: "Jua", "Noto Sans KR", sans-serif; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1rem 2.5rem; }
+  header.bar {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar-row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 1rem 0; }
+  h1 { margin: 0; font-size: 2.25rem; line-height: 1; font-weight: 400; }
+  .sub { display: flex; align-items: center; gap: 0.45rem; margin: 0.5rem 0 0; color: #2f6b45; letter-spacing: 0.14em; font-size: 0.8rem; }
+  .dot { width: 0.45rem; height: 0.45rem; border-radius: 999px; display: inline-block; }
+  .daymark {
+    display: flex; align-items: center; gap: 0.4rem;
+    background: var(--card); border-radius: 999px; padding: 0.45rem 0.8rem;
+    box-shadow: 0 0 0 1px rgba(47, 107, 69, 0.12);
+    margin: 0;
+  }
+  .heart { width: 1rem; height: 1rem; fill: var(--blush); }
+  .panel { background: var(--card); box-shadow: var(--shadow); border-radius: 1.5rem; }
+  .cover { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 1.5rem; box-shadow: 0 0 0 1px rgba(47, 107, 69, 0.12); display: block; }
+  .row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+  .press { border: 0; border-radius: 999px; transition: transform 150ms ease, background 150ms ease; }
+  .press:active { transform: scale(0.98); }
+  .pine { background: var(--pine); color: var(--on-pine); height: 2.75rem; padding: 0 1rem; }
+  .pine:hover { background: var(--pine-hover); }
+  .ghost { background: transparent; color: var(--pine); height: 2.75rem; padding: 0 0.8rem; }
+  .mint { background: var(--mint); height: 2.75rem; padding: 0 1rem; }
+  .field {
+    width: 100%; height: 2.75rem; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--paper); padding: 0 1rem;
+  }
+  textarea.field { height: auto; min-height: 5.5rem; border-radius: 1.25rem; padding: 0.7rem 1rem; resize: vertical; }
+  .lock { max-width: 22rem; margin: 1.5rem auto; display: grid; gap: 0.75rem; }
+  .grid { display: grid; gap: 1rem; align-items: start; }
+  @media (min-width: 960px) { .grid { grid-template-columns: minmax(0, 1.45fr) 22rem; } }
+  .month-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+  .nav { width: 2.75rem; height: 2.75rem; border: 0; border-radius: 999px; background: transparent; font-size: 1.4rem; }
+  .nav:hover, .icon:hover { background: var(--paper-2); }
+  .title { margin: 0; font-size: 1.8rem; font-weight: 400; min-width: 9rem; text-align: center; }
+  .week, .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.25rem; }
+  .week div { text-align: center; font-size: 0.75rem; color: var(--muted); padding: 0.4rem 0; }
+  .week div:first-child { color: var(--pine); }
+  .cell {
+    min-height: 4.2rem; border: 0; border-radius: 1rem; background: transparent;
+    display: flex; flex-direction: column; gap: 0.15rem; padding: 0.35rem 0.15rem; text-align: left;
+  }
+  .cell:hover { background: var(--paper-2); }
+  .cell.on { background: var(--pine); color: var(--on-pine); }
+  .cell.today:not(.on) { background: var(--butter); }
+  .cell.off { opacity: 0.45; }
+  .num { text-align: center; font-size: 0.875rem; }
+  .pill { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 0.25rem; padding: 0.05rem 0.2rem; font-size: 10px; color: var(--ink); }
+  .chip { border: 0; border-radius: 999px; height: 2.5rem; padding: 0 0.8rem; background: var(--paper-2); }
+  .chip.on { background: var(--pine); color: var(--on-pine); }
+  .legend span, .who label { border-radius: 999px; padding: 0.2rem 0.65rem; font-size: 0.75rem; }
+  .geun { background: #D5D1C8; }
+  .jin { background: #B7D7A8; }
+  .both { background: #E3D4F2; }
+  .none { background: var(--paper-2); }
+  .item { border-radius: 0.8rem; padding: 0.75rem; display: flex; justify-content: space-between; gap: 0.5rem; }
+  .icon { width: 2.75rem; height: 2.75rem; border: 0; border-radius: 999px; background: transparent; color: var(--muted); }
+  .muted { color: var(--muted); }
+  .err { color: var(--rose); margin: 0; font-size: 0.875rem; }
+  .ok { color: var(--pine); margin: 0.4rem 0 0; font-size: 0.875rem; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #day-panel { scroll-margin-top: 5.5rem; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+const PASSWORD = "3020";
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDwLpkChkA33y_GoQy5mTYNKaV-7VJEnmw",
+  authDomain: "nfp-log.firebaseapp.com",
+  projectId: "nfp-log",
+  storageBucket: "nfp-log.firebasestorage.app",
+  messagingSenderId: "701205429107",
+  appId: "1:701205429107:web:e9bd2570b91bb626f62306"
+};
+const STORE = "nfplog-file-v1";
+const UNLOCK = "nfplog-unlocked";
+const WRITERS = ["근수", "진희"];
+const TAGS = [
+  { id: "plan", label: "일정" },
+  { id: "task", label: "할 일" },
+  { id: "mark", label: "기념" },
+  { id: "memo", label: "메모" },
+];
+const WEEK = ["일", "월", "화", "수", "목", "금", "토"];
+const DEFAULT_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#163E2A"/><stop offset="60%" stop-color="#2A6B42"/><stop offset="100%" stop-color="#3E7A52"/></linearGradient></defs><rect width="1200" height="630" fill="url(#sky)"/><g fill="#0F2E1E" opacity="0.5"><ellipse cx="140" cy="70" rx="200" ry="90"/><ellipse cx="1060" cy="50" rx="220" ry="100"/><ellipse cx="600" cy="30" rx="260" ry="70"/></g><g fill="#1B4A30"><path d="M0 160c90-70 160 40 250-10 90-50 150 40 250-10 100-50 160 40 260-10 100-50 180 30 280-20 90-40 120 20 160-10v180H0z"/></g><g fill="#245C3A"><path d="M30 70l36 150 36-150z"/><path d="M150 30l40 160 40-160z"/><path d="M980 40l38 150 38-150z"/><path d="M1100 80l28 120 28-120z"/></g><ellipse cx="620" cy="490" rx="460" ry="145" fill="#6B6F69"/><ellipse cx="230" cy="430" rx="160" ry="115" fill="#767A74"/><ellipse cx="190" cy="395" rx="72" ry="42" fill="#8A8E86"/><path d="M145 385c-40-70-10-140 40-160 28-10 40 30 30 70-8 40-30 70-40 95z" fill="#767A74"/><ellipse cx="720" cy="400" rx="300" ry="125" fill="#F3E4C4"/><ellipse cx="1000" cy="515" rx="95" ry="38" fill="#6B6F69"/><path d="M1065 505c40-8 70 8 78 22-20 18-50 20-78 8z" fill="#A07A62"/><g transform="translate(500 230)"><ellipse cx="55" cy="85" rx="78" ry="38" fill="#C9A08A"/><path d="M-10 70c20-18 90-10 120 8 8 20-20 36-55 34-30-2-58-16-65-42z" fill="#E7A0A0"/><ellipse cx="20" cy="28" rx="30" ry="26" fill="#D7B39A"/><ellipse cx="-6" cy="-10" rx="11" ry="30" fill="#D7B39A"/><ellipse cx="22" cy="-14" rx="11" ry="32" fill="#D7B39A"/><ellipse cx="10" cy="32" rx="4" ry="2.2" fill="#5A463C"/><ellipse cx="32" cy="30" rx="4" ry="2.2" fill="#5A463C"/><path d="M17 40c2 3 8 3 10 0" fill="none" stroke="#5A463C" stroke-width="2" stroke-linecap="round"/></g></svg>`;
+
+function emptyState() {
+  return { cover: "", events: [], notes: [], writers: [] };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE);
+    if (!raw) return emptyState();
+    const data = JSON.parse(raw);
+    const writers = Array.isArray(data.writers) ? WRITERS.filter((name) => data.writers.includes(name)) : [];
+    return {
+      cover: typeof data.cover === "string" && data.cover.startsWith("data:image/") ? data.cover : "",
+      events: Array.isArray(data.events) ? data.events : [],
+      notes: Array.isArray(data.notes) ? data.notes : [],
+      writers,
+    };
+  } catch {
+    return emptyState();
+  }
+}
+function saveState() {
+  localStorage.setItem(STORE, JSON.stringify(state));
+}
+let db = null;
+let applying = false;
+const bootLocal = loadState();
+const seen = { events: false, notes: false, meta: false };
+let seeded = false;
+function cloudOn() {
+  return !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId && db);
+}
+function eventDoc(item) {
+  return {
+    title: item.title || "",
+    note: item.note || "",
+    startsOn: item.startsOn || "",
+    allDay: !!item.allDay,
+    startTime: item.startTime || null,
+    endTime: item.endTime || null,
+    tag: item.tag || "plan",
+    authorName: item.authorName || ""
+  };
+}
+function pushMeta() {
+  if (!cloudOn() || applying) return;
+  db.doc("nfplog/shared").set({ writers: state.writers, cover: state.cover || "" }, { merge: true }).catch((error) => {
+    ui.error = "저장이 다른 폰에 전달되지 않았어요";
+    ui.status = error && error.message ? error.message : "";
+  });
+}
+function pushEvent(item) {
+  if (!cloudOn() || applying || !item.id) return;
+  db.collection("nfplog/shared/events").doc(item.id).set(eventDoc(item)).catch(() => {
+    ui.error = "일정이 다른 폰에 전달되지 않았어요";
+  });
+}
+function pushNote(item) {
+  if (!cloudOn() || applying || !item.id) return;
+  db.collection("nfplog/shared/notes").doc(item.id).set({
+    day: item.day, body: item.body || "", authorName: item.authorName || ""
+  }).catch(() => {
+    ui.error = "기록이 다른 폰에 전달되지 않았어요";
+  });
+}
+function dropEvent(id) {
+  if (!cloudOn() || applying) return;
+  db.collection("nfplog/shared/events").doc(id).delete().catch(() => {
+    ui.error = "지우기가 다른 폰에 전달되지 않았어요";
+  });
+}
+function dropNote(id) {
+  if (!cloudOn() || applying) return;
+  db.collection("nfplog/shared/notes").doc(id).delete().catch(() => {
+    ui.error = "지우기가 다른 폰에 전달되지 않았어요";
+  });
+}
+async function replaceCloud() {
+  if (!cloudOn()) return;
+  const events = await db.collection("nfplog/shared/events").get();
+  const notes = await db.collection("nfplog/shared/notes").get();
+  const batch = db.batch();
+  events.forEach((doc) => batch.delete(doc.ref));
+  notes.forEach((doc) => batch.delete(doc.ref));
+  state.events.forEach((item) => {
+    if (item.id) batch.set(db.collection("nfplog/shared/events").doc(item.id), eventDoc(item));
+  });
+  state.notes.forEach((item) => {
+    if (item.id) batch.set(db.collection("nfplog/shared/notes").doc(item.id), {
+      day: item.day, body: item.body || "", authorName: item.authorName || ""
+    });
+  });
+  batch.set(db.doc("nfplog/shared"), { writers: state.writers, cover: state.cover || "" }, { merge: true });
+  await batch.commit();
+}
+function repaintIfOpen() {
+  if (ui.unlocked) paint();
+}
+function considerSeed() {
+  if (seeded || !seen.events || !seen.notes || !seen.meta) return;
+  seeded = true;
+  if (state.events.length === 0 && bootLocal.events.length) {
+    bootLocal.events.forEach((item) => pushEvent(item));
+  }
+  if (state.notes.length === 0 && bootLocal.notes.length) {
+    bootLocal.notes.forEach((item) => pushNote(item));
+  }
+  if (!state.cover && bootLocal.cover) {
+    state.cover = bootLocal.cover;
+    pushMeta();
+  }
+}
+function startCloud() {
+  if (!FIREBASE_CONFIG.apiKey || !FIREBASE_CONFIG.projectId || !window.firebase) return;
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+  db.doc("nfplog/shared").onSnapshot((snap) => {
+    const data = snap.data() || {};
+    applying = true;
+    state.cover = typeof data.cover === "string" ? data.cover : "";
+    state.writers = Array.isArray(data.writers) ? WRITERS.filter((name) => data.writers.includes(name)) : state.writers;
+    applying = false;
+    seen.meta = true;
+    considerSeed();
+    repaintIfOpen();
+  }, () => { ui.error = "Firebase 규칙을 확인해 주세요"; repaintIfOpen(); });
+  db.collection("nfplog/shared/events").onSnapshot((qs) => {
+    applying = true;
+    state.events = qs.docs.map((doc) => Object.assign({ id: doc.id }, doc.data()));
+    saveState();
+    applying = false;
+    seen.events = true;
+    considerSeed();
+    repaintIfOpen();
+  });
+  db.collection("nfplog/shared/notes").onSnapshot((qs) => {
+    applying = true;
+    state.notes = qs.docs.map((doc) => Object.assign({ id: doc.id }, doc.data()));
+    saveState();
+    applying = false;
+    seen.notes = true;
+    considerSeed();
+    repaintIfOpen();
+  });
+}
+function seoulYmd(now = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(now);
+}
+function togetherDays(now = new Date()) {
+  const today = Date.parse(seoulYmd(now) + "T00:00:00Z");
+  const start = Date.parse("2026-11-03T00:00:00Z");
+  return Math.round((today - start) / 86400000) + 1;
+}
+function ymd(year, month0, day) {
+  return year + "-" + String(month0 + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+}
+function parseYmd(value) {
+  return new Date(Number(value.slice(0, 4)), Number(value.slice(5, 7)) - 1, Number(value.slice(8, 10)));
+}
+function monthGrid(year, month0) {
+  const first = new Date(year, month0, 1);
+  const start = new Date(year, month0, 1 - first.getDay());
+  const days = [];
+  for (let i = 0; i < 42; i += 1) {
+    const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+    days.push(ymd(date.getFullYear(), date.getMonth(), date.getDate()));
+  }
+  return days;
+}
+function esc(value) {
+  return String(value).replace(/[&<>"']/g, (ch) => {
+    if (ch === "&") return "&" + "amp;";
+    if (ch === "<") return "&" + "lt;";
+    if (ch === ">") return "&" + "gt;";
+    if (ch === '"') return "&" + "quot;";
+    return "&" + "#39;";
+  });
+}
+
+function tone(name) {
+  const geun = String(name).includes("근수");
+  const jin = String(name).includes("진희");
+  if (geun && jin) return "both";
+  if (geun) return "geun";
+  if (jin) return "jin";
+  return "none";
+}
+function authorName(list) {
+  return WRITERS.filter((name) => list.includes(name)).join(" · ");
+}
+function whenLabel(item) {
+  if (item.allDay) return "하루 종일";
+  if (item.startTime && item.endTime) return item.startTime + "–" + item.endTime;
+  return item.startTime || "시간 미정";
+}
+function eventsOn(day) {
+  return state.events
+    .filter((item) => item.startsOn === day)
+    .sort((a, b) => Number(a.allDay) === Number(b.allDay) ? String(a.startTime || "").localeCompare(String(b.startTime || "")) : a.allDay ? -1 : 1);
+}
+function shrinkCover(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      const scale = Math.min(1, 720 / Math.max(image.width, image.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(image.width * scale));
+      canvas.height = Math.max(1, Math.round(image.height * scale));
+      const context = canvas.getContext("2d");
+      if (!context) { URL.revokeObjectURL(url); reject(new Error("이미지를 읽지 못했습니다")); return; }
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      let quality = 0.72;
+      let data = canvas.toDataURL("image/jpeg", quality);
+      while (data.length > 280000 && quality > 0.35) {
+        quality -= 0.1;
+        data = canvas.toDataURL("image/jpeg", quality);
+      }
+      if (data.length > 350000) reject(new Error("사진이 너무 커요. 더 작은 사진으로 올려 주세요"));
+      else resolve(data);
+    };
+    image.onerror = () => { URL.revokeObjectURL(url); reject(new Error("이 사진은 열 수 없어요")); };
+    image.src = url;
+  });
+}
+
+const state = loadState();
+const today = seoulYmd();
+const todayDate = parseYmd(today);
+const ui = {
+  unlocked: localStorage.getItem(UNLOCK) === "1",
+  year: todayDate.getFullYear(),
+  month0: todayDate.getMonth(),
+  selected: today,
+  draft: { id: null, title: "", note: "", allDay: true, startTime: "09:00", endTime: "10:00", tag: "plan" },
+  noteBody: "",
+  error: "",
+  status: "",
+  pass: "",
+  passError: "",
+};
+
+function paint() {
+  const root = document.getElementById("app");
+  const focusId = document.activeElement && document.activeElement.id;
+  const caret = document.activeElement && document.activeElement.selectionStart;
+  const days = togetherDays();
+  const label = (days > 0 ? "+" : "") + days + "일";
+  const head = `<header class="bar"><div class="wrap bar-row"><div><h1 class="display">프피로그</h1><p class="sub display"><span class="dot" style="background:#e8a8a8"></span><span class="dot" style="background:#f3e4c4"></span><span class="dot" style="background:#8fb89a"></span>INFP X ENFP</p></div><p class="daymark" aria-label="2026년 11월 3일부터 ${label}"><svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-8.15C.7 10.1 1.2 6.7 4.05 5.4 6.2
