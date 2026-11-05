@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 174,
+      "bodyTextHash": "92c5a9762ae409e197a56c1a8c83bda79d1336019f945b31458ce7a456f9697c",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 둘의 하루를 한 칸에 적어요 초대 코드를 받은 사람만 일정과 하루 기록을 남길 수 있",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/candy-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 174,
+      "bodyTextHash": "92c5a9762ae409e197a56c1a8c83bda79d1336019f945b31458ce7a456f9697c",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 둘의 하루를 한 칸에 적어요 초대 코드를 받은 사람만 일정과 하루 기록을 남길 수 있",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/candy-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/candy-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

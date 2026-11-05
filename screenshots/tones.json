@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 343,
+      "bodyTextHash": "fa6eda88d9e00dafc3f72b5e271c44999ac2230d6f8846a0ebe3e613c9593abb",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 표지 바꾸기 프피로그 같이 적는 달력이에요. 2026년 11월 오늘 근수 진희 둘 다",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/tones.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 343,
+      "bodyTextHash": "fa6eda88d9e00dafc3f72b5e271c44999ac2230d6f8846a0ebe3e613c9593abb",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 표지 바꾸기 프피로그 같이 적는 달력이에요. 2026년 11월 오늘 근수 진희 둘 다",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/tones-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/tones.json"
+}

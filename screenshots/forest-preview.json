@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 183,
+      "bodyTextHash": "73022a3fa517631c3d5e5f52ffadcd68ce3ea04e2f8d8368645d636f0060bfeb",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 둘의 하루를 한 칸에 적어요 로그인하면 같은 달력에 일정과 하루 기록을 같이 남길 수",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/forest-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 183,
+      "bodyTextHash": "73022a3fa517631c3d5e5f52ffadcd68ce3ea04e2f8d8368645d636f0060bfeb",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 둘의 하루를 한 칸에 적어요 로그인하면 같은 달력에 일정과 하루 기록을 같이 남길 수",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/forest-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/forest-preview.json"
+}

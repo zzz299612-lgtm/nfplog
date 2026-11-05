@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 288,
+      "bodyTextHash": "024c9ad7bcfee11a330127b3f83bda1ee29a0a511bae6747ac9967e43c9d3a40",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 표지 바꾸기 기본 표지 프피로그 Grok user · 함께 2026년 11월 오늘 일",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/nologin.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 288,
+      "bodyTextHash": "024c9ad7bcfee11a330127b3f83bda1ee29a0a511bae6747ac9967e43c9d3a40",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 표지 바꾸기 기본 표지 프피로그 Grok user · 함께 2026년 11월 오늘 일",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/nologin-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [
+    "[auth-invariant] dev server has sign-in on but the next build has it off. Start the app with `npm run dev` — invoking vite directly skips scripts/with-app-env.mjs, so the dev server and the built output resolve .grok/app-env.json differently."
+  ],
+  "verdictFile": "/workspace/screenshots/nologin.json"
+}

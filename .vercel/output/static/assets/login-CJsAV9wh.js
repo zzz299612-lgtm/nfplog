@@ -1,0 +1,1 @@
+import{a as e,o as t,t as n,y as r}from"./chrome-B7poK5j_.js";import{i,r as a}from"./index-BvPwiTRh.js";var o=i();function s(){let{user:n,isPending:i}=r();return i?(0,o.jsx)(e,{}):n?(0,o.jsx)(a,{to:`/`}):(0,o.jsx)(t,{})}function c(){return(0,o.jsx)(n,{fallback:(0,o.jsx)(e,{}),children:(0,o.jsx)(s,{})})}export{c as component};

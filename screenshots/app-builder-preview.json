@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "우리달",
+      "hasCanvas": false,
+      "bodyTextLen": 12,
+      "bodyTextHash": "936cf58d5f33451589cd0c49a0f767591fc7ed5018ba079ca197370795536092",
+      "bodyTextPrefix": "함께 쓰는 달력 우리달",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "우리달",
+      "hasCanvas": false,
+      "bodyTextLen": 206,
+      "bodyTextHash": "13760585aed0d38e24001ba185034e21b7a37bfb93ca566c9c4c1406997411e4",
+      "bodyTextPrefix": "함께 쓰는 달력 우리달 하나의 달에 같이 적습니다 초대 코드를 받은 사람만 일정과 하루 기록을 남길 수 있습니다. ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}

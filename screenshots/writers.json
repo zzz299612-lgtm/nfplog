@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 280,
+      "bodyTextHash": "cc8376feb51322275344f55ed37e473deaa19fd2699b81a8bf9901205ff5b05b",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 표지 바꾸기 프피로그 같이 적는 달력이에요. 2026년 11월 오늘 일 월 화 수 목",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/writers.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "프피로그",
+      "hasCanvas": false,
+      "bodyTextLen": 308,
+      "bodyTextHash": "37c1495de0bf6d5fd7a33753135a56492b80bbef767161da6c66bb71c8688ade",
+      "bodyTextPrefix": "프피로그 INFP X ENFP 표지 바꾸기 프피로그 같이 적는 달력이에요. 2026년 11월 오늘 일 월 화 수 목",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/writers-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/writers.json"
+}
